@@ -1,3 +1,10 @@
+# Fix SQLite version issue for ChromaDB
+__import__('pysqlite3')
+import sys
+
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
+# Import libraries
 import chromadb
 from sentence_transformers import SentenceTransformer
 
@@ -18,7 +25,9 @@ documents = [
 ]
 
 # Load embedding model
-model = SentenceTransformer('all-MiniLM-L6-v2')
+model = SentenceTransformer(
+    'all-MiniLM-L6-v2'
+)
 
 # Generate embeddings
 embeddings = model.encode(documents)
@@ -47,5 +56,6 @@ print("\nQuery:")
 print(query)
 
 print("\nRetrieved Documents:")
+
 for doc in results['documents'][0]:
     print("-", doc)
